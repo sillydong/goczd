@@ -1,4 +1,4 @@
-package godata
+package govalidate
 
 import "testing"
 
