@@ -12,7 +12,7 @@ import (
 //生成随机字符串
 func RandomString(n int)string {
 	rand.Seed(time.Now().UnixNano())
-	letters := []rune("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+	letters := []rune("AIJUVWXYZ012KLMNOPQRST3ijklmn4opqrstuvwxyz56BCDEFGH789abcdefghopqrstuvwxyz")
 	b := make([]rune, n)
 	for i := range b {
 		b[i] = letters[rand.Intn(len(letters))]
