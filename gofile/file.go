@@ -11,6 +11,8 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"gopkg.in/bufio.v1"
+	"path/filepath"
+	"path"
 )
 
 //将Json内容写入文件
@@ -148,4 +150,16 @@ func homeWindows() (string,error) {
 	}
 
 	return home, nil
+}
+
+func WorkDir() (string, error){
+	file, err := exec.LookPath(os.Args[0])
+	if err != nil {
+		return "", err
+	}
+	p, err := filepath.Abs(file)
+	if err != nil {
+		return "", err
+	}
+	return path.Dir(strings.Replace(p, "\\", "/", -1)), err
 }
