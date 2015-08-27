@@ -23,6 +23,8 @@ type Request interface {
 
 //打开DEBUG模式，将打印发起的请求信息
 var REQUEST_DEBUG bool=false
+//设置请求的UserAgent
+var REQUEST_USERAGENT=""
 
 //发起GET请求返回struct
 func DoGetResponse(req Request,resp Response) error {
@@ -57,6 +59,9 @@ func DoGet(req Request)([]byte,error){
 					fmt.Printf("[DEBUG][GET]%s[%s]\n", url, params.Encode())
 				}
 				client := Get(url).SetEnableCookie(true)
+				if REQUEST_USERAGENT!=""{
+					client.SetUserAgent(REQUEST_USERAGENT)
+				}
 				headers := req.H()
 				if len(headers)>0 {
 					for key, val := range headers {
@@ -104,6 +109,9 @@ func DoPost(req Request)([]byte,error){
 			url := req.URL()
 			if url!=""{
 				client := Post(url).SetEnableCookie(true)
+				if REQUEST_USERAGENT!="" {
+					client.SetUserAgent(REQUEST_USERAGENT)
+				}
 				if len(params)>0 {
 					for key, value := range params {
 						client.Param(key, value[0])
