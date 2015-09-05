@@ -1,9 +1,10 @@
 package gofile
+
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
-func Test_WorkDir(t *testing.T){
+func Test_WorkDir(t *testing.T) {
 	fmt.Println(WorkDir())
 }

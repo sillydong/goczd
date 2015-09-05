@@ -1,10 +1,11 @@
 package govalidate
+
 import (
-	"github.com/cosiner/gohper/regexp"
 	"encoding/json"
+	"github.com/cosiner/gohper/regexp"
 	"net"
-	"strings"
 	"net/url"
+	"strings"
 )
 
 //判断是否空字符串
@@ -56,13 +57,13 @@ func IsISBN(str string, version int) bool {
 }
 
 //是否10位ISBN
-func IsISBN10(str string)bool{
-	return IsISBN(str,10)
+func IsISBN10(str string) bool {
+	return IsISBN(str, 10)
 }
 
 //是否13位ISBN
-func IsISBN13(str string)bool{
-	return IsISBN(str,13)
+func IsISBN13(str string) bool {
+	return IsISBN(str, 13)
 }
 
 //是否UUIDv3
@@ -118,22 +119,22 @@ func IsInt(str string) bool {
 }
 
 //是否float
-func IsFloat(str string)bool{
+func IsFloat(str string) bool {
 	return regexp.MustCompile("^(?:[-+]?(?:[0-9]+))?(?:\\.[0-9]*)?(?:[eE][\\+\\-]?(?:[0-9]+))?$").MatchString(str)
 }
 
 //是否hex
-func IsHexadecimal(str string)bool{
+func IsHexadecimal(str string) bool {
 	return regexp.MustCompile("^[0-9a-fA-F]+$").MatchString(str)
 }
 
 //是否hex颜色值
-func IsHexcolor(str string)bool{
+func IsHexcolor(str string) bool {
 	return regexp.MustCompile("^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$").MatchString(str)
 }
 
 //是否RGB颜色值
-func IsRGBcolor(str string)bool{
+func IsRGBcolor(str string) bool {
 	return regexp.MustCompile("^rgb\\(\\s*(0|[1-9]\\d?|1\\d\\d?|2[0-4]\\d|25[0-5])\\s*,\\s*(0|[1-9]\\d?|1\\d\\d?|2[0-4]\\d|25[0-5])\\s*,\\s*(0|[1-9]\\d?|1\\d\\d?|2[0-4]\\d|25[0-5])\\s*\\)$").MatchString(str)
 }
 
@@ -162,7 +163,7 @@ func IsHalfWidth(str string) bool {
 }
 
 //是否BASE64
-func IsBase64(str string)bool{
+func IsBase64(str string) bool {
 	return regexp.MustCompile("^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=|[A-Za-z0-9+\\/]{4})$").MatchString(str)
 }
 
@@ -175,12 +176,12 @@ func IsPrintableASCII(str string) bool {
 }
 
 //是否经度
-func IsLatitude(str string)bool{
+func IsLatitude(str string) bool {
 	return regexp.MustCompile("^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?)$").MatchString(str)
 }
 
 //是否纬度
-func IsLongitude(str string)bool{
+func IsLongitude(str string) bool {
 	return regexp.MustCompile("^[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$").MatchString(str)
 }
 
@@ -200,12 +201,12 @@ func IsURL(str string) bool {
 }
 
 //是否windows路径
-func IsWinPath(str string)bool{
+func IsWinPath(str string) bool {
 	return regexp.MustCompile(`^[a-zA-Z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]*$`).MatchString(str)
 }
 
 //是否unix路径
-func IsUnixPath(str string)bool{
+func IsUnixPath(str string) bool {
 	return regexp.MustCompile(`^((?:\/[a-zA-Z0-9\.\:]+(?:_[a-zA-Z0-9\:\.]+)*(?:\-[\:a-zA-Z0-9\.]+)*)+\/?)$`).MatchString(str)
 }
 
@@ -239,6 +240,6 @@ func IsJSON(str string) bool {
 }
 
 //判断是否手机号
-func IsMobile(data string)bool{
+func IsMobile(data string) bool {
 	return regexp.MustCompile("^1[3875][0-9]{9}$").MatchString(data)
 }

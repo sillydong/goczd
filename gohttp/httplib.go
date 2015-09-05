@@ -38,9 +38,10 @@ func createDefaultCookie() {
 	defaultCookieJar, _ = cookiejar.New(nil)
 }
 
-func ResetCookie(){
+func ResetCookie() {
 	defaultCookieJar = nil
 }
+
 // Overwrite default settings
 func SetDefaultSetting(setting BeegoHttpSettings) {
 	settingMutex.Lock()

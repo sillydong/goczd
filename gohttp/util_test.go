@@ -1,50 +1,49 @@
 package gohttp
+
 import (
 	"fmt"
 	"strconv"
 )
 
-
-type PersonResponse struct{
-	Status int
+type PersonResponse struct {
+	Status  int
 	Message string
-	Data string
+	Data    string
 }
 
-func (resp *PersonResponse)OK()bool{
-	return resp.Status==1
+func (resp *PersonResponse) OK() bool {
+	return resp.Status == 1
 }
 
-func (resp *PersonResponse)Msg()bool{
+func (resp *PersonResponse) Msg() bool {
 	return resp.Message
 }
 
-
 type PersonRequest struct {
-	UserId int
+	UserId   int
 	UserName string
 }
 
-func (req *PersonRequest)URL()(string,error){
-	return "http://test.test/user/"+strconv.Itoa(req.UserId),nil
+func (req *PersonRequest) URL() (string, error) {
+	return "http://test.test/user/" + strconv.Itoa(req.UserId), nil
 }
 
-func GetPerson(){
+func GetPerson() {
 	resp := &PersonResponse{}
-	err := DoGetResponse(&PersonRequest{UserId:1},resp)
+	err := DoGetResponse(&PersonRequest{UserId: 1}, resp)
 	if err != nil {
-		fmt.Printf("%v\n",err)
+		fmt.Printf("%v\n", err)
 	} else {
 		if resp.OK() {
-			fmt.Printf("%v",resp)
+			fmt.Printf("%v", resp)
 		} else {
-			fmt.Printf("%v",resp.Msg())
+			fmt.Printf("%v", resp.Msg())
 		}
 	}
 }
 
-func PostPerson(){
-	resp,err := DoPost(&PersonRequest{UserId:1,UserName:"hello"})
+func PostPerson() {
+	resp, err := DoPost(&PersonRequest{UserId: 1, UserName: "hello"})
 	if err != nil {
 		fmt.Printf("%v\n", err)
 	} else {

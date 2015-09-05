@@ -1,8 +1,9 @@
 package goxorm
+
 import (
-	"github.com/go-xorm/core"
-	"github.com/donnie4w/go-logger/logger"
 	"fmt"
+	"github.com/donnie4w/go-logger/logger"
+	"github.com/go-xorm/core"
 )
 
 type XormLogger struct {
@@ -12,7 +13,7 @@ type XormLogger struct {
 func NewXormLogger(logdir, filename string, l core.LogLevel) *XormLogger {
 	logger.SetRollingDaily(logdir, filename)
 	return &XormLogger{
-		level:l,
+		level: l,
 	}
 }
 
