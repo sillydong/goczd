@@ -1,16 +1,17 @@
 package godata
+
 import (
-	"strings"
-	"encoding/base64"
-	"crypto/sha1"
 	"crypto/hmac"
-	"sort"
+	"crypto/sha1"
+	"encoding/base64"
 	"math/rand"
+	"sort"
+	"strings"
 	"time"
 )
 
 //生成随机字符串
-func RandomString(n int)string {
+func RandomString(n int) string {
 	rand.Seed(time.Now().UnixNano())
 	letters := []rune("AIJUVWXYZ012KLMNOPQRST3ijklmn4opqrstuvwxyz56BCDEFGH789abcdefghopqrstuvwxyz")
 	b := make([]rune, n)
@@ -29,13 +30,13 @@ func HMACSH1(params []string, sep, key string) string {
 }
 
 //批量替换字符串
-func StrReplace(s string,from,to []string,n int)string{
-	if len(s)==0 || len(from)==0 || len(to)==0 || len(from) != len(to){
+func StrReplace(s string, from, to []string, n int) string {
+	if len(s) == 0 || len(from) == 0 || len(to) == 0 || len(from) != len(to) {
 		return s
 	}
-	for key,valfrom := range from{
-		valto:=to[key]
-		s=strings.Replace(s,valfrom,valto,n)
+	for key, valfrom := range from {
+		valto := to[key]
+		s = strings.Replace(s, valfrom, valto, n)
 	}
 	return s
 }

@@ -1,12 +1,13 @@
 package godata
+
 import "reflect"
 
 //判断对象是否在数组中
 func InArray(array interface{}, v interface{}) (exists bool) {
-	exists=false
+	exists = false
 
 	switch reflect.TypeOf(array).Kind() {
-	case reflect.Slice,reflect.Array:
+	case reflect.Slice, reflect.Array:
 		s := reflect.ValueOf(array)
 
 		for i := 0; i < s.Len(); i++ {
@@ -21,7 +22,7 @@ func InArray(array interface{}, v interface{}) (exists bool) {
 
 //判断对象在数组中的位置
 func ArrayIndex(array interface{}, v interface{}) (index int) {
-	index=-1
+	index = -1
 
 	switch reflect.TypeOf(array).Kind() {
 	case reflect.Slice, reflect.Array:
@@ -38,9 +39,9 @@ func ArrayIndex(array interface{}, v interface{}) (index int) {
 }
 
 //判断是否数组
-func IsArray(array interface{})bool{
+func IsArray(array interface{}) bool {
 	switch reflect.TypeOf(array).Kind() {
-	case reflect.Slice,reflect.Array:
+	case reflect.Slice, reflect.Array:
 		return true
 	}
 	return false
