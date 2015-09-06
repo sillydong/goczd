@@ -98,6 +98,16 @@ func FileExists(path string) bool {
 	return err == nil || os.IsExist(err)
 }
 
+//获取文件大小
+func FileSize(path string)int64{
+	if FileExists(path){
+		if info, err := os.Stat(path);err==nil{
+			return info.Size()
+		}
+	}
+	return int64(0)
+}
+
 //获取用户家目录
 func GetUserHome() (string, error) {
 	user, err := user.Current()
