@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"fmt"
 )
 
 //生成随机字符串
@@ -39,4 +40,27 @@ func StrReplace(s string, from, to []string, n int) string {
 		s = strings.Replace(s, valfrom, valto, n)
 	}
 	return s
+}
+
+//友好的byte显示
+func FixByte(b int64)string{
+	const (
+		_ = iota
+		KB = 1<<(10*iota)
+		MB
+		GB
+		TB
+	)
+	
+	switch {
+	case b >= TB:
+		return fmt.Sprintf("%.4fTB", float64(b)/float64(TB))
+	case b >= GB:
+		return fmt.Sprintf("%.4fGB", float64(b)/float64(GB))
+	case b >= MB:
+		return fmt.Sprintf("%.4fMB", float64(b)/float64(MB))
+	case b >= KB:
+		return fmt.Sprintf("%.4fKB", float64(b)/float64(KB))
+	}
+	return fmt.Sprintf("%.4fB", float64(b))
 }
