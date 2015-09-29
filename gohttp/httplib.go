@@ -426,7 +426,6 @@ func (b *BeegoHttpRequest) SendOut() (*http.Response, error) {
 		}
 		b.dump = dump
 	}
-	fmt.Println("do...")
 	return client.Do(b.req)
 }
 
