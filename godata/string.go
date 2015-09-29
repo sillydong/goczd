@@ -4,11 +4,11 @@ import (
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/base64"
+	"fmt"
 	"math/rand"
 	"sort"
 	"strings"
 	"time"
-	"fmt"
 )
 
 //生成随机字符串
@@ -43,15 +43,15 @@ func StrReplace(s string, from, to []string, n int) string {
 }
 
 //友好的byte显示
-func FixByte(b int64)string{
+func FriendlyByte(b int64) string {
 	const (
-		_ = iota
-		KB = 1<<(10*iota)
+		_  = iota
+		KB = 1 << (10 * iota)
 		MB
 		GB
 		TB
 	)
-	
+
 	switch {
 	case b >= TB:
 		return fmt.Sprintf("%.4fTB", float64(b)/float64(TB))

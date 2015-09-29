@@ -99,9 +99,9 @@ func FileExists(path string) bool {
 }
 
 //获取文件大小
-func FileSize(path string)int64{
-	if FileExists(path){
-		if info, err := os.Stat(path);err==nil{
+func FileSize(path string) int64 {
+	if FileExists(path) {
+		if info, err := os.Stat(path); err == nil {
 			return info.Size()
 		}
 	}
