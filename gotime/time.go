@@ -5,7 +5,7 @@ import "time"
 const (
 	FORMAT_YYYY_MM_DD          = "2006-01-02"
 	FORMAT_YYYY_MM_DD_HH_II_SS = "2006-01-02 15:04:05"
-	Y                          = "2016"
+	Y                          = "2006"
 	M                          = "01"
 	D                          = "02"
 	H                          = "15"
