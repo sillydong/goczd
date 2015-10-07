@@ -29,7 +29,7 @@ func (pagination *Pagination) Calc(pagesize uint) *Pagination {
 }
 
 func (pagination *Pagination) getPageCount() uint {
-	return uint(math.Ceil(float64(pagination.ItemCount + pagination.PageSize - 1) / float64(pagination.PageSize)))
+	return uint(math.Ceil(float64(pagination.ItemCount+pagination.PageSize-1) / float64(pagination.PageSize)))
 }
 
 func (pagination *Pagination) getOffset() uint {
