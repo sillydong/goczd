@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	WEIBO = 1+iota
+	WEIBO = 1 + iota
 	QZONE
 	WEIXIN
 )
