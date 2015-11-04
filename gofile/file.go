@@ -60,8 +60,14 @@ func IoUtilWriteFile(path string, content []byte, perm os.FileMode) error {
 }
 
 //通过OS写文件
-func OsWriteFile(path string, content []byte, perm os.FileMode) error {
-	f, err := os.Create(path)
+func OsWriteFile(path string, content []byte, perm os.FileMode, append bool) error {
+	var f *os.File
+	var err error
+	if append {
+		f, err = os.OpenFile(path, os.O_WRONLY|os.O_APPEND|os.O_CREATE, perm)
+	} else {
+		f, err = os.OpenFile(path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, perm)
+	}
 	if err != nil {
 		return err
 	} else {
