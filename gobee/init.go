@@ -1,7 +1,7 @@
 package gobee
 
 import (
-	"git.sillydong.com/chenzhidong/goczd/gofile"
+	"github.com/sillydong/goczd/gofile"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/orm"
