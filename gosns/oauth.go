@@ -2,7 +2,7 @@ package gosns
 
 import (
 	"fmt"
-	"git.sillydong.com/chenzhidong/goczd/gohttp"
+	"github.com/astaxie/beego/httplib"
 )
 
 const (
@@ -44,12 +44,17 @@ type UserInfo struct {
 }
 
 func get(url string, v interface{}) error {
-	req := gohttp.Get(url)
+	req := httplib.Get(url)
 	return req.ToJson(v)
 }
 
+func gets(url string)(string,error){
+	req := httplib.Get(url)
+	return req.String()
+}
+
 func post(url string, params map[string]string, v interface{}) error {
-	req := gohttp.Post(url)
+	req := httplib.Post(url)
 	if len(params) > 0 {
 		for key, val := range params {
 			req.Param(key, val)

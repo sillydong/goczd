@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/google/go-querystring/query"
 	"strings"
+	"github.com/astaxie/beego/httplib"
 )
 
 //返回数据接口
@@ -56,10 +57,11 @@ func DoGet(req Request) ([]byte, error) {
 						url = url + "?" + params.Encode()
 					}
 				}
+				client := httplib.Get(url).SetEnableCookie(true)
 				if REQUEST_DEBUG {
-					fmt.Printf("[DEBUG][GET]%s[%s]\n", url, params.Encode())
+					client.Debug(true)
+					client.DumpBody(true)
 				}
-				client := Get(url).SetEnableCookie(true)
 				if REQUEST_USERAGENT != "" {
 					client.SetUserAgent(REQUEST_USERAGENT)
 				}
@@ -70,9 +72,6 @@ func DoGet(req Request) ([]byte, error) {
 					}
 				}
 				bytes, err := client.Bytes()
-				if REQUEST_DEBUG {
-					fmt.Printf("[DEBUG][RESULT]%s\n", string(bytes))
-				}
 				if err != nil {
 					return nil, err
 				} else {
@@ -109,7 +108,11 @@ func DoPost(req Request) ([]byte, error) {
 		if ok, err := req.V(); ok {
 			url := req.URL()
 			if url != "" {
-				client := Post(url).SetEnableCookie(true)
+				client := httplib.Post(url).SetEnableCookie(true)
+				if REQUEST_DEBUG{
+					client.Debug(true)
+					client.DumpBody(true)
+				}
 				if REQUEST_USERAGENT != "" {
 					client.SetUserAgent(REQUEST_USERAGENT)
 				}
@@ -124,13 +127,7 @@ func DoPost(req Request) ([]byte, error) {
 						client.Header(key, val)
 					}
 				}
-				if REQUEST_DEBUG {
-					fmt.Printf("[DEBUG][POST]%s[%s]\n", url, params.Encode())
-				}
 				bytes, err := client.Bytes()
-				if REQUEST_DEBUG {
-					fmt.Printf("[DEBUG][RESULT]%s\n", string(bytes))
-				}
 				if err != nil {
 					return nil, err
 				} else {
@@ -143,9 +140,4 @@ func DoPost(req Request) ([]byte, error) {
 			return nil, err
 		}
 	}
-}
-
-//清理Cookie记录
-func DoCleanCookie() {
-	ResetCookie()
 }
