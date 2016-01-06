@@ -114,7 +114,7 @@ func InitDB() {
 	var dsn string
 	db_type := beego.AppConfig.DefaultString("db_type", "mysql")
 	db_host := beego.AppConfig.DefaultString("db_host", "127.0.0.1")
-	db_port := beego.AppConfig.DefaultString("db_port", 3306)
+	db_port := beego.AppConfig.DefaultString("db_port", "3306")
 	db_user := beego.AppConfig.DefaultString("db_user", "root")
 	db_pass := beego.AppConfig.DefaultString("db_pass", "")
 	db_name := beego.AppConfig.String("db_name")
