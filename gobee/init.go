@@ -1,12 +1,12 @@
 package gobee
 
 import (
-	"github.com/sillydong/goczd/gofile"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
+	"github.com/sillydong/goczd/gofile"
 	"path/filepath"
 	//_ "github.com/mattn/go-sqlite3"
 	"fmt"
@@ -19,7 +19,10 @@ import (
 )
 
 func InitLog() {
-	beego.Info("initiating log")
+	if beego.RunMode == "dev" {
+		beego.Info("initiating log")
+	}
+
 	logconf, err := gofile.IoUtilReadFile(filepath.Join(beego.AppPath, "conf", "log.json"))
 	if err != nil {
 		panic(err)
@@ -32,9 +35,12 @@ func InitLog() {
 //
 // memcache_host memcache主机(127.0.0.1)
 //
-// memcache_port memcache端口(11211)  
+// memcache_port memcache端口(11211)
 func InitMemcache() (cache.Cache, error) {
-	beego.Info("initiating memcache")
+	if beego.RunMode == "dev" {
+		beego.Info("initiating memcache")
+	}
+
 	memcache_host := beego.AppConfig.DefaultString("memcache_host", "127.0.0.1")
 	memcache_port := beego.AppConfig.DefaultString("memcache_port", "11211")
 	return cache.NewCache("memcache", fmt.Sprintf(`{"conn":"%s:%s"`, memcache_host, memcache_port))
@@ -50,7 +56,10 @@ func InitMemcache() (cache.Cache, error) {
 //
 // filecache_expire 过期时间(3600秒)
 func InitFilecache() (cache.Cache, error) {
-	beego.Info("initiating file cache")
+	if beego.RunMode == "dev" {
+		beego.Info("initiating file cache")
+	}
+
 	filecache_dir := beego.AppConfig.DefaultString("filecache_dir", "")
 	filecache_suffix := beego.AppConfig.DefaultString("filecache_suffix", ".cache")
 	filecache_level := beego.AppConfig.DefaultInt("filecache_level", 2)
@@ -77,7 +86,10 @@ func InitFilecache() (cache.Cache, error) {
 //
 // memory_gc_interval 内存回收周期(60秒)
 func InitMemorycache() (cache.Cache, error) {
-	beego.Info("initiating memory cache")
+	if beego.RunMode == "dev" {
+		beego.Info("initiating memory cache")
+	}
+
 	memory_interval := beego.AppConfig.DefaultInt("memory_gc_interval", 60)
 	return cache.NewCache("memory", fmt.Sprintf(`{"interval":%d}`, memory_interval))
 }
@@ -88,7 +100,10 @@ func InitMemorycache() (cache.Cache, error) {
 //
 // rediscache_port redis端口(6379)
 func InitRediscache() (cache.Cache, error) {
-	beego.Info("initiating redis cache")
+	if beego.RunMode == "dev" {
+		beego.Info("initiating redis cache")
+	}
+
 	rediscache_host := beego.AppConfig.DefaultString("rediscache_host", "127.0.0.1")
 	rediscache_port := beego.AppConfig.DefaultString("rediscache_port", "6379")
 	return cache.NewCache("redis", fmt.Sprintf(`{"conn":"%s:%s"}`, rediscache_host, rediscache_port))
@@ -110,7 +125,10 @@ func InitRediscache() (cache.Cache, error) {
 //
 // db_sslmode 是否SSL模式连接，仅用于postgresql(disable)
 func InitDB() {
-	beego.Info("initiating db")
+	if beego.RunMode == "dev" {
+		beego.Info("initiating db")
+	}
+
 	var dsn string
 	db_type := beego.AppConfig.DefaultString("db_type", "mysql")
 	db_host := beego.AppConfig.DefaultString("db_host", "127.0.0.1")
@@ -128,13 +146,13 @@ func InitDB() {
 	case "postgres":
 		orm.RegisterDriver("postgres", orm.DR_Postgres)
 		dsn = fmt.Sprintf("dbname=%s host=%s  user=%s  password=%s  port=%s  sslmode=%s", db_name, db_host, db_user, db_pass, db_port, db_sslmode)
-		//	case "sqlite3":
-		//		orm.RegisterDriver("sqlite3", orm.DR_Sqlite)
-		//		if db_path == "" {
-		//			db_path = "./"
-		//		}
-		//		dns = fmt.Sprintf("%s%s.db", db_path, db_name)
-		//		break
+	//	case "sqlite3":
+	//		orm.RegisterDriver("sqlite3", orm.DR_Sqlite)
+	//		if db_path == "" {
+	//			db_path = "./"
+	//		}
+	//		dns = fmt.Sprintf("%s%s.db", db_path, db_name)
+	//		break
 	default:
 		panic("Database driver is not allowed:" + db_type)
 	}
@@ -151,7 +169,9 @@ func InitDB() {
 //
 // redis_db redis使用的数据库(0)
 func InitRedis() *redis.Pool {
-	beego.Info("initiating redis db")
+	if beego.RunMode == "dev" {
+		beego.Info("initiating redis db")
+	}
 	redis_host := beego.AppConfig.DefaultString("redis_host", "127.0.0.1")
 	redis_port := beego.AppConfig.DefaultString("redis_port", "6379")
 	redis_pass := beego.AppConfig.DefaultString("redis_pass", "")
