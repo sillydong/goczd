@@ -1,25 +1,24 @@
 package gobee
 
 import (
+	"path/filepath"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	"github.com/sillydong/goczd/gofile"
-	"path/filepath"
 	//_ "github.com/mattn/go-sqlite3"
 	"fmt"
-	_ "github.com/astaxie/beego/cache/memcache"
-	"github.com/garyburd/redigo/redis"
 	"os"
-	"runtime"
 	"syscall"
-	"time"
+
+	_ "github.com/astaxie/beego/cache/memcache"
 )
 
 func InitLog() {
-	if beego.RunMode == "dev" {
+	if beego.BConfig.RunMode == "dev" {
 		beego.Info("initiating log")
 	}
 
@@ -37,7 +36,7 @@ func InitLog() {
 //
 // memcache_port memcache端口(11211)
 func InitMemcache() (cache.Cache, error) {
-	if beego.RunMode == "dev" {
+	if beego.BConfig.RunMode == "dev" {
 		beego.Info("initiating memcache")
 	}
 
@@ -56,7 +55,7 @@ func InitMemcache() (cache.Cache, error) {
 //
 // filecache_expire 过期时间(3600秒)
 func InitFilecache() (cache.Cache, error) {
-	if beego.RunMode == "dev" {
+	if beego.BConfig.RunMode == "dev" {
 		beego.Info("initiating file cache")
 	}
 
@@ -86,7 +85,7 @@ func InitFilecache() (cache.Cache, error) {
 //
 // memory_gc_interval 内存回收周期(60秒)
 func InitMemorycache() (cache.Cache, error) {
-	if beego.RunMode == "dev" {
+	if beego.BConfig.RunMode == "dev" {
 		beego.Info("initiating memory cache")
 	}
 
@@ -100,7 +99,7 @@ func InitMemorycache() (cache.Cache, error) {
 //
 // rediscache_port redis端口(6379)
 func InitRediscache() (cache.Cache, error) {
-	if beego.RunMode == "dev" {
+	if beego.BConfig.RunMode == "dev" {
 		beego.Info("initiating redis cache")
 	}
 
@@ -125,7 +124,7 @@ func InitRediscache() (cache.Cache, error) {
 //
 // db_sslmode 是否SSL模式连接，仅用于postgresql(disable)
 func InitDB() {
-	if beego.RunMode == "dev" {
+	if beego.BConfig.RunMode == "dev" {
 		beego.Info("initiating db")
 	}
 
@@ -140,11 +139,11 @@ func InitDB() {
 	db_sslmode := beego.AppConfig.DefaultString("db_sslmode", "disable")
 	switch db_type {
 	case "mysql":
-		orm.RegisterDriver("mysql", orm.DR_MySQL)
+		orm.RegisterDriver("mysql", orm.DRMySQL)
 		dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", db_user, db_pass, db_host, db_port, db_name)
 		break
 	case "postgres":
-		orm.RegisterDriver("postgres", orm.DR_Postgres)
+		orm.RegisterDriver("postgres", orm.DRPostgres)
 		dsn = fmt.Sprintf("dbname=%s host=%s  user=%s  password=%s  port=%s  sslmode=%s", db_name, db_host, db_user, db_pass, db_port, db_sslmode)
 	//	case "sqlite3":
 	//		orm.RegisterDriver("sqlite3", orm.DR_Sqlite)
@@ -157,52 +156,4 @@ func InitDB() {
 		panic("Database driver is not allowed:" + db_type)
 	}
 	orm.RegisterDataBase("default", db_type, dsn)
-}
-
-//初始化redis数据库，配置参数如下
-//
-// redis_host redis主机(127.0.0.1)
-//
-// redis_port redis端口(6379)
-//
-// redis_pass redis密码
-//
-// redis_db redis使用的数据库(0)
-func InitRedis() *redis.Pool {
-	if beego.RunMode == "dev" {
-		beego.Info("initiating redis db")
-	}
-	redis_host := beego.AppConfig.DefaultString("redis_host", "127.0.0.1")
-	redis_port := beego.AppConfig.DefaultString("redis_port", "6379")
-	redis_pass := beego.AppConfig.DefaultString("redis_pass", "")
-	redis_db := beego.AppConfig.DefaultString("redis_db", "")
-
-	return &redis.Pool{
-		MaxIdle:     runtime.NumCPU(),
-		IdleTimeout: 180 * time.Second,
-		TestOnBorrow: func(c redis.Conn, t time.Time) error {
-			_, err := c.Do("PING")
-			if err != nil {
-				beego.Critical(err)
-			}
-			return err
-		},
-		Dial: func() (redis.Conn, error) {
-			conn, err := redis.DialTimeout("tcp", fmt.Sprintf("%s:%s", redis_host, redis_port), 1*time.Second, 1*time.Second, 1*time.Second)
-			if err != nil {
-				return nil, err
-			}
-			if redis_pass != "" {
-				if _, err := conn.Do("AUTH", redis_pass); err != nil {
-					return nil, err
-				}
-			}
-			if redis_db != "" {
-				if _, err := conn.Do("SELECT", redis_db); err != nil {
-					return nil, err
-				}
-			}
-			return conn, nil
-		},
-	}
 }
