@@ -15,9 +15,8 @@
 package golog
 
 import (
+	"github.com/sillydong/goczd/golog/logs"
 	"strings"
-
-	"github.com/astaxie/beego/logs"
 )
 
 // Log levels to control the logging output.
