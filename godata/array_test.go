@@ -5,10 +5,10 @@ import "testing"
 func Test_InArray(t *testing.T) {
 	arr := []string{"a", "b", "c", "d"}
 	str := "a"
-	if ok, err := InArray(arr, str); ok {
+	if InArray(arr, str) {
 		t.Logf("%v [%s]", arr, str)
 	} else {
-		t.Errorf("%v", err)
+		t.Errorf("not in array")
 	}
 }
 
