@@ -60,9 +60,17 @@ func Emergency(v ...interface{}) {
 	BeeLogger.Emergency(generateFmtStr(len(v)), v...)
 }
 
+func Emergencyf(format string, v ...interface{}) {
+	BeeLogger.Emergency(format, v...)
+}
+
 // Alert logs a message at alert level.
 func Alert(v ...interface{}) {
 	BeeLogger.Alert(generateFmtStr(len(v)), v...)
+}
+
+func Alertf(format string, v ...interface{}) {
+	BeeLogger.Alert(format, v...)
 }
 
 // Critical logs a message at critical level.
@@ -70,9 +78,17 @@ func Critical(v ...interface{}) {
 	BeeLogger.Critical(generateFmtStr(len(v)), v...)
 }
 
+func Criticalf(format string, v ...interface{}) {
+	BeeLogger.Critical(format, v...)
+}
+
 // Error logs a message at error level.
 func Error(v ...interface{}) {
 	BeeLogger.Error(generateFmtStr(len(v)), v...)
+}
+
+func Errorf(format string, v ...interface{}) {
+	BeeLogger.Error(format, v...)
 }
 
 // Warning logs a message at warning level.
@@ -80,9 +96,17 @@ func Warning(v ...interface{}) {
 	BeeLogger.Warning(generateFmtStr(len(v)), v...)
 }
 
+func Warningf(format string, v ...interface{}) {
+	BeeLogger.Warning(format, v...)
+}
+
 // Warn compatibility alias for Warning()
 func Warn(v ...interface{}) {
 	BeeLogger.Warn(generateFmtStr(len(v)), v...)
+}
+
+func Warnf(format string, v ...interface{}) {
+	BeeLogger.Warn(format, v...)
 }
 
 // Notice logs a message at notice level.
@@ -90,9 +114,17 @@ func Notice(v ...interface{}) {
 	BeeLogger.Notice(generateFmtStr(len(v)), v...)
 }
 
+func Noticef(format string, v ...interface{}) {
+	BeeLogger.Notice(format, v...)
+}
+
 // Informational logs a message at info level.
 func Informational(v ...interface{}) {
 	BeeLogger.Informational(generateFmtStr(len(v)), v...)
+}
+
+func Informationalf(format string, v ...interface{}) {
+	BeeLogger.Informational(format, v...)
 }
 
 // Info compatibility alias for Warning()
@@ -100,15 +132,27 @@ func Info(v ...interface{}) {
 	BeeLogger.Info(generateFmtStr(len(v)), v...)
 }
 
+func Infof(format string, v ...interface{}) {
+	BeeLogger.Info(format, v...)
+}
+
 // Debug logs a message at debug level.
 func Debug(v ...interface{}) {
 	BeeLogger.Debug(generateFmtStr(len(v)), v...)
+}
+
+func Debugf(format string, v ...interface{}) {
+	BeeLogger.Debug(format, v...)
 }
 
 // Trace logs a message at trace level.
 // compatibility alias for Warning()
 func Trace(v ...interface{}) {
 	BeeLogger.Trace(generateFmtStr(len(v)), v...)
+}
+
+func Tracef(format string, v ...interface{}) {
+	BeeLogger.Trace(format, v...)
 }
 
 func generateFmtStr(n int) string {
