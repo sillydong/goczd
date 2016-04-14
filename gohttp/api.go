@@ -3,9 +3,9 @@ package gohttp
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/astaxie/beego/httplib"
 	"github.com/google/go-querystring/query"
 	"strings"
-	"github.com/astaxie/beego/httplib"
 )
 
 //返回数据接口
@@ -109,7 +109,7 @@ func DoPost(req Request) ([]byte, error) {
 			url := req.URL()
 			if url != "" {
 				client := httplib.Post(url).SetEnableCookie(true)
-				if REQUEST_DEBUG{
+				if REQUEST_DEBUG {
 					client.Debug(true)
 					client.DumpBody(true)
 				}

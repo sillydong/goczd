@@ -48,7 +48,7 @@ func get(url string, v interface{}) error {
 	return req.ToJson(v)
 }
 
-func gets(url string)(string,error){
+func gets(url string) (string, error) {
 	req := httplib.Get(url)
 	return req.String()
 }
