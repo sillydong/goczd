@@ -79,7 +79,7 @@ func (c *ConfigFile) HasOption(section string, option string) bool {
 // GetRawString gets the (raw) string value for the given option in the section.
 // The raw string value is not subjected to unfolding, which was illustrated in the beginning of this documentation.
 // It returns an error if either the section or the option do not exist.
-func (c *ConfigFile) GetRawString(section string, option string) (value string, err error) {
+func (c *ConfigFile) GetRawString(section string, option string, defaultvalue string) (value string, err error) {
 	if section == "" {
 		section = "default"
 	}
@@ -91,19 +91,19 @@ func (c *ConfigFile) GetRawString(section string, option string) (value string, 
 		if value, ok = c.data[section][option]; ok {
 			return value, nil
 		}
-		return "", GetError{OptionNotFound, "", "", section, option}
+		return defaultvalue, GetError{OptionNotFound, "", "", section, option}
 	}
-	return "", GetError{SectionNotFound, "", "", section, option}
+	return defaultvalue, GetError{SectionNotFound, "", "", section, option}
 }
 
 // GetString gets the string value for the given option in the section.
 // If the value needs to be unfolded (see e.g. %(host)s example in the beginning of this documentation),
 // then GetString does this unfolding automatically, up to DepthValues number of iterations.
 // It returns an error if either the section or the option do not exist, or the unfolding cycled.
-func (c *ConfigFile) GetString(section string, option string) (value string, err error) {
-	value, err = c.GetRawString(section, option)
+func (c *ConfigFile) GetString(section string, option string, defaultvalue string) (value string, err error) {
+	value, err = c.GetRawString(section, option, defaultvalue)
 	if err != nil {
-		return "", err
+		return value, err
 	}
 
 	section = strings.ToLower(section)
@@ -123,7 +123,7 @@ func (c *ConfigFile) GetString(section string, option string) (value string, err
 			nvalue = c.data[section][noption]
 		}
 		if nvalue == "" {
-			return "", GetError{OptionNotFound, "", "", section, option}
+			return defaultvalue, GetError{OptionNotFound, "", "", section, option}
 		}
 
 		// substitute by new value and take off leading '%(' and trailing ')s'
@@ -131,15 +131,15 @@ func (c *ConfigFile) GetString(section string, option string) (value string, err
 	}
 
 	if i == DepthValues {
-		return "", GetError{MaxDepthReached, "", "", section, option}
+		return defaultvalue, GetError{MaxDepthReached, "", "", section, option}
 	}
 
 	return value, nil
 }
 
 // GetInt has the same behaviour as GetString but converts the response to int.
-func (c *ConfigFile) GetInt(section string, option string) (value int, err error) {
-	sv, err := c.GetString(section, option)
+func (c *ConfigFile) GetInt(section string, option string, defaultvalue int) (value int, err error) {
+	sv, err := c.GetString(section, option, strconv.Itoa(defaultvalue))
 	if err == nil {
 		value, err = strconv.Atoi(sv)
 		if err != nil {
@@ -151,8 +151,8 @@ func (c *ConfigFile) GetInt(section string, option string) (value int, err error
 }
 
 // GetFloat has the same behaviour as GetString but converts the response to float.
-func (c *ConfigFile) GetFloat64(section string, option string) (value float64, err error) {
-	sv, err := c.GetString(section, option)
+func (c *ConfigFile) GetFloat64(section string, option string, defaultvalue float64) (value float64, err error) {
+	sv, err := c.GetString(section, option, strconv.FormatFloat(defaultvalue, 'f', -1, 64))
 	if err == nil {
 		value, err = strconv.ParseFloat(sv, 64)
 		if err != nil {
@@ -165,8 +165,8 @@ func (c *ConfigFile) GetFloat64(section string, option string) (value float64, e
 
 // GetBool has the same behaviour as GetString but converts the response to bool.
 // See constant BoolStrings for string values converted to bool.
-func (c *ConfigFile) GetBool(section string, option string) (value bool, err error) {
-	sv, err := c.GetString(section, option)
+func (c *ConfigFile) GetBool(section string, option string, defaultvalue bool) (value bool, err error) {
+	sv, err := c.GetString(section, option, strconv.FormatBool(defaultvalue))
 	if err != nil {
 		return false, err
 	}
