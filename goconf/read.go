@@ -93,7 +93,7 @@ func (c *ConfigFile) Read(reader io.Reader) (err error) {
 				c.AddOption(section, option, value)
 
 			case section != "" && option != "": // continuation of multi-line value
-				prev, _ := c.GetRawString(section, option)
+				prev, _ := c.GetRawString(section, option, "")
 				value := strings.TrimSpace(stripComments(l))
 				c.AddOption(section, option, prev+"\n"+value)
 

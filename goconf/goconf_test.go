@@ -54,7 +54,7 @@ func TestBuild(t *testing.T) {
 		switch element.(type) {
 		case stringtest:
 			e := element.(stringtest)
-			ans, err := c.GetString(e.section, e.option)
+			ans, err := c.GetString(e.section, e.option, "")
 			if err != nil {
 				t.Error("c.GetString(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.Error())
 			}
@@ -63,7 +63,7 @@ func TestBuild(t *testing.T) {
 			}
 		case inttest:
 			e := element.(inttest)
-			ans, err := c.GetInt(e.section, e.option)
+			ans, err := c.GetInt(e.section, e.option, "")
 			if err != nil {
 				t.Error("c.GetInt(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.Error())
 			}
@@ -72,7 +72,7 @@ func TestBuild(t *testing.T) {
 			}
 		case booltest:
 			e := element.(booltest)
-			ans, err := c.GetBool(e.section, e.option)
+			ans, err := c.GetBool(e.section, e.option, "")
 			if err != nil {
 				t.Error("c.GetBool(\"" + e.section + "\",\"" + e.option + "\") returned error: " + err.Error())
 			}
