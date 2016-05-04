@@ -72,6 +72,10 @@ func DoGet(req Request) ([]byte, error) {
 					}
 				}
 				bytes, err := client.Bytes()
+				if REQUEST_DEBUG {
+					fmt.Printf("REQUEST:\n%v\n", string(client.DumpRequest()))
+					fmt.Printf("RESPONSE:\n%v\n", string(bytes))
+				}
 				if err != nil {
 					return nil, err
 				} else {
@@ -128,6 +132,10 @@ func DoPost(req Request) ([]byte, error) {
 					}
 				}
 				bytes, err := client.Bytes()
+				if REQUEST_DEBUG {
+					fmt.Printf("REQUEST:\n%v\n", string(client.DumpRequest()))
+					fmt.Printf("RESPONSE:\n%v\n", string(bytes))
+				}
 				if err != nil {
 					return nil, err
 				} else {
