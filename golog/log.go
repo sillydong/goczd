@@ -15,7 +15,11 @@
 package golog
 
 import (
+	"encoding/json"
+	"fmt"
+	"github.com/sillydong/goczd/gofile"
 	"github.com/sillydong/goczd/golog/logs"
+	"path"
 	"strings"
 )
 
@@ -30,6 +34,25 @@ const (
 	LevelInformational
 	LevelDebug
 )
+
+func InitGoLog(filename string, level int, maxdays int) {
+	if !path.IsAbs(filename) {
+		workingdir, _ := gofile.WorkDir()
+		if workingdir != "" {
+			filename = path.Join(workingdir, filename)
+		}
+	}
+	fmt.Println(filename)
+	logconf := map[string]interface{}{
+		"filename": filename,
+		"daily":    true,
+		"maxdays":  maxdays,
+		"rotate":   true,
+		"level":    level,
+	}
+	logstr, _ := json.Marshal(logconf)
+	SetLogger("file", string(logstr))
+}
 
 // BeeLogger references the used application logger.
 var BeeLogger = logs.NewLogger(100)
