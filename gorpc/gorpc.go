@@ -14,7 +14,7 @@ type response struct {
 	Error  string
 }
 
-func (r *response) run() {
+func (r *response) run() map[string]interface{} {
 	return map[string]interface{}{
 		"status": r.Status,
 		"data":   r.Data,
@@ -22,8 +22,8 @@ func (r *response) run() {
 	}
 }
 
-func NewResponse(status bool, data interface{}, err error) map[string]interface{} {
-	return &response{Status: status, Data: data, Error: err.Error()}.run()
+func NewResponse(status bool, data interface{}, err string) map[string]interface{} {
+	return (&response{Status: status, Data: data, Error: err}).run()
 }
 
 //event
@@ -35,7 +35,8 @@ func (e *event) OnBeforeInvoke(name string, args []reflect.Value, byref bool, co
 func (e *event) OnAfterInvoke(name string, args []reflect.Value, byref bool, result []reflect.Value, context hprose.Context) {
 }
 func (e *event) OnSendError(err error, context hprose.Context) {
-	golog.Error(err, context)
+	golog.Errorf("%+v", err)
+	golog.Errorf("%+v", context)
 }
 
 //init rpc
