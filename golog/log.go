@@ -42,7 +42,6 @@ func InitGoLog(filename string, level int, maxdays int) {
 			filename = path.Join(workingdir, filename)
 		}
 	}
-	fmt.Println(filename)
 	logconf := map[string]interface{}{
 		"filename": filename,
 		"daily":    true,
