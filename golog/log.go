@@ -16,11 +16,11 @@ package golog
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/sillydong/goczd/gofile"
-	"github.com/sillydong/goczd/golog/logs"
 	"path"
 	"strings"
+
+	"github.com/sillydong/goczd/gofile"
+	"github.com/sillydong/goczd/golog/logs"
 )
 
 // Log levels to control the logging output.
