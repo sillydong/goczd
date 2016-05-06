@@ -3,6 +3,7 @@ package goredis
 import (
 	"fmt"
 	"gopkg.in/redis.v3"
+	"reflect"
 	"time"
 )
 
@@ -32,4 +33,32 @@ func InitRedis(host, port, socket string, db int64, password string) (client *re
 	_, err = client.Ping().Result()
 
 	return
+}
+
+func FlatMap(v interface{}) []interface{} {
+	args := make([]interface{}, 0)
+	rv := reflect.ValueOf(v)
+	switch rv.Kind() {
+	case reflect.Map:
+		for _, k := range rv.MapKeys() {
+			args = append(args, k.Interface(), rv.MapIndex(k).Interface())
+		}
+	}
+	return args
+}
+
+func FlatMapString(v interface{}) []string {
+	args := make([]string, 0)
+	rv := reflect.ValueOf(v)
+	switch rv.Kind() {
+	case reflect.Map:
+		for _, k := range rv.MapKeys() {
+			if rv.MapIndex(k).IsNil() {
+				args = append(args, k.String(), "")
+			} else {
+				args = append(args, k.String(), fmt.Sprintf("%v", rv.MapIndex(k).Interface()))
+			}
+		}
+	}
+	return args
 }
