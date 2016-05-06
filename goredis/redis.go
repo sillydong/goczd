@@ -1,64 +1,33 @@
 package goredis
 
 import (
-	"fmt"
-	"gopkg.in/redis.v3"
-	"reflect"
+	"github.com/garyburd/redigo/redis"
 	"time"
 )
 
-func InitRedis(host, port, socket string, db int64, password string) (client *redis.Client, err error) {
+func InitRedis(host, port, socket string, db int, password string) (client *redis.Pool) {
+	var network, addr string
 	if socket != "" {
-		client = redis.NewClient(&redis.Options{
-			Network:     "unix",
-			Addr:        socket,
-			Password:    password,
-			DB:          db,
-			MaxRetries:  2,
-			IdleTimeout: 60 * time.Second,
-		})
+		network = "unix"
+		addr = socket
 	} else if host != "" && port != "" {
-		client = redis.NewClient(&redis.Options{
-			Network:     "tcp",
-			Addr:        host + ":" + port,
-			Password:    password,
-			DB:          db,
-			MaxRetries:  2,
-			IdleTimeout: 60 * time.Second,
-		})
+		network = "tcp"
+		addr = host + ":" + port
 	} else {
-		err = fmt.Errorf("redis configuration error")
+		panic("redis configuration error")
 	}
 
-	_, err = client.Ping().Result()
-
-	return
-}
-
-func FlatMap(v interface{}) []interface{} {
-	args := make([]interface{}, 0)
-	rv := reflect.ValueOf(v)
-	switch rv.Kind() {
-	case reflect.Map:
-		for _, k := range rv.MapKeys() {
-			args = append(args, k.Interface(), rv.MapIndex(k).Interface())
-		}
-	}
-	return args
-}
-
-func FlatMapString(v interface{}) []string {
-	args := make([]string, 0)
-	rv := reflect.ValueOf(v)
-	switch rv.Kind() {
-	case reflect.Map:
-		for _, k := range rv.MapKeys() {
-			if rv.MapIndex(k).IsNil() {
-				args = append(args, k.String(), "")
+	client = &redis.Pool{
+		Dial: func() (redis.Conn, error) {
+			conn, err := redis.Dial(network, addr, redis.DialDatabase(db), redis.DialPassword(password))
+			if err != nil {
+				return nil, err
 			} else {
-				args = append(args, k.String(), fmt.Sprintf("%v", rv.MapIndex(k).Interface()))
+				return conn, nil
 			}
-		}
+		},
+		IdleTimeout: 60 * time.Second,
 	}
-	return args
+
+	return client
 }
