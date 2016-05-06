@@ -1,10 +1,11 @@
 package gorpc
 
 import (
-	"github.com/hprose/hprose-go"
 	"github.com/sillydong/goczd/golog"
+	"github.com/sillydong/hprose-go"
 	"net/http"
 	"reflect"
+	"time"
 )
 
 //response
@@ -30,9 +31,13 @@ func NewResponse(status bool, data interface{}, err string) map[string]interface
 type event struct{}
 
 func (e *event) OnBeforeInvoke(name string, args []reflect.Value, byref bool, context hprose.Context) {
+	context.SetInt64("request", time.Now().UnixNano())
 }
 
 func (e *event) OnAfterInvoke(name string, args []reflect.Value, byref bool, result []reflect.Value, context hprose.Context) {
+	if request, ok := context.GetInt64("request"); ok {
+		golog.Infof("%v: %vns", name, time.Now().UnixNano()-request)
+	}
 }
 func (e *event) OnSendError(err error, context hprose.Context) {
 	golog.Errorf("%+v", err)
