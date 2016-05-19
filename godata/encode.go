@@ -45,6 +45,6 @@ func UrlEncode(data string) string {
 	return url.QueryEscape(data)
 }
 
-func UrlDecode(data string) string {
+func UrlDecode(data string) (string, error) {
 	return url.QueryUnescape(data)
 }
