@@ -3,9 +3,11 @@ package godata
 import (
 	"crypto/md5"
 	"crypto/sha1"
+	"encoding/base64"
 	"encoding/hex"
 	"hash/crc32"
 	"hash/fnv"
+	"net/url"
 )
 
 func MD5(data []byte) string {
@@ -29,4 +31,20 @@ func SHA1(data []byte) string {
 	hasher := sha1.New()
 	hasher.Write(data)
 	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func Base64Encode(data []byte) string {
+	return base64.StdEncoding.EncodeToString(data)
+}
+
+func Base64Decode(data string) ([]byte, error) {
+	return base64.StdEncoding.DecodeString(data)
+}
+
+func UrlEncode(data string) string {
+	return url.QueryEscape(data)
+}
+
+func UrlDecode(data string) string {
+	return url.QueryUnescape(data)
 }
