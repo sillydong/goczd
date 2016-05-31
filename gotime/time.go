@@ -6,6 +6,7 @@ import (
 )
 
 const (
+	FORMAT_YYYY_MM             = "2006-01"
 	FORMAT_YYYY_MM_DD          = "2006-01-02"
 	FORMAT_YYYY_MM_DD_HH_II_SS = "2006-01-02 15:04:05"
 	Y                          = "2006"
