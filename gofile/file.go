@@ -68,10 +68,10 @@ func OsWriteFile(path string, content []byte, perm os.FileMode, append bool) err
 	} else {
 		f, err = os.OpenFile(path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, perm)
 	}
+	defer f.Close()
 	if err != nil {
 		return err
 	} else {
-		defer f.Close()
 		_, err := f.Write(content)
 		if err != nil {
 			return err
@@ -86,10 +86,10 @@ func OsWriteFile(path string, content []byte, perm os.FileMode, append bool) err
 //通过Bufio写文件
 func BufWriteFile(path string, content []byte, perm os.FileMode) error {
 	f, err := os.Create(path)
+	defer f.Close()
 	if err != nil {
 		return err
 	} else {
-		defer f.Close()
 		w := bufio.NewWriter(f)
 		w.Write(content)
 		w.Flush()
