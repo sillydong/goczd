@@ -24,10 +24,16 @@ func Bytes2String(b []byte) string {
 	return *(*string)(unsafe.Pointer(&b))
 }
 
+const (
+	ALPHABET     = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+	NUMERALS     = "0123456789"
+	ALPHANUMERIC = NUMERALS + ALPHABET
+)
+
 //生成随机字符串
-func RandomString(n int) string {
+func RandomString(n int, randstring string) string {
 	rand.Seed(time.Now().UnixNano())
-	letters := []rune("AIJUVWXYZ012KLMNOPQRST3ijklmn4opqrstuvwxyz56BCDEFGH789abcdefghopqrstuvwxyz")
+	letters := []rune(randstring)
 	b := make([]rune, n)
 	for i := range b {
 		b[i] = letters[rand.Intn(len(letters))]
