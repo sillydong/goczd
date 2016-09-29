@@ -15,24 +15,10 @@
 package golog
 
 import (
-	"encoding/json"
-	"path"
-	"strings"
-
+	"github.com/YoungPioneers/blog4go"
 	"github.com/sillydong/goczd/gofile"
-	"github.com/sillydong/goczd/golog/logs"
-)
-
-// Log levels to control the logging output.
-const (
-	LevelEmergency = iota
-	LevelAlert
-	LevelCritical
-	LevelError
-	LevelWarning
-	LevelNotice
-	LevelInformational
-	LevelDebug
+	"os"
+	"path"
 )
 
 func InitGoLog(filename string, level int, maxdays int) {
@@ -42,140 +28,86 @@ func InitGoLog(filename string, level int, maxdays int) {
 			filename = path.Join(workingdir, filename)
 		}
 	}
-	logconf := map[string]interface{}{
-		"filename": filename,
-		"daily":    true,
-		"maxdays":  maxdays,
-		"rotate":   true,
-		"level":    level,
+	diroflog := path.Dir(filename)
+	os.MkdirAll(diroflog, 0777)
+
+	blog4go.NewBaseFileWriter(filename, true)
+	blog4go.SetLevel(blog4go.Levels[level])
+}
+
+func InitGoMultiLog(filedir string, level int, maxdays int) {
+	if !path.IsAbs(filedir) {
+		workingdir, _ := gofile.WorkDir()
+		if workingdir != "" {
+			filedir = path.Join(workingdir, filedir)
+		}
 	}
-	logstr, _ := json.Marshal(logconf)
-	SetLogger("file", string(logstr))
+	os.MkdirAll(filedir, 0777)
+
+	blog4go.NewFileWriter(filedir, true)
+	blog4go.SetLevel(blog4go.Levels[level])
 }
 
-// BeeLogger references the used application logger.
-var BeeLogger = logs.NewLogger(100)
-
-// SetLevel sets the global log level used by the simple logger.
-func SetLevel(l int) {
-	BeeLogger.SetLevel(l)
+func Close() {
+	blog4go.Close()
 }
 
-// SetLogFuncCall set the CallDepth, default is 3
-func SetLogFuncCall(b bool) {
-	BeeLogger.EnableFuncCallDepth(b)
-	BeeLogger.SetLogFuncCallDepth(3)
+// Trace static function for Trace
+func Trace(args ...interface{}) {
+	blog4go.Trace(args...)
 }
 
-// SetLogger sets a new logger.
-func SetLogger(adaptername string, config string) error {
-	err := BeeLogger.SetLogger(adaptername, config)
-	if err != nil {
-		return err
-	}
-	return nil
+// Tracef static function for Tracef
+func Tracef(format string, args ...interface{}) {
+	blog4go.Tracef(format, args...)
 }
 
-// Emergency logs a message at emergency level.
-func Emergency(v ...interface{}) {
-	BeeLogger.Emergency(generateFmtStr(len(v)), v...)
+// Debug static function for Debug
+func Debug(args ...interface{}) {
+	blog4go.Debug(args...)
 }
 
-func Emergencyf(format string, v ...interface{}) {
-	BeeLogger.Emergency(format, v...)
+// Debugf static function for Debugf
+func Debugf(format string, args ...interface{}) {
+	blog4go.Debugf(format, args...)
 }
 
-// Alert logs a message at alert level.
-func Alert(v ...interface{}) {
-	BeeLogger.Alert(generateFmtStr(len(v)), v...)
+// Info static function for Info
+func Info(args ...interface{}) {
+	blog4go.Info(args...)
 }
 
-func Alertf(format string, v ...interface{}) {
-	BeeLogger.Alert(format, v...)
+// Infof static function for Infof
+func Infof(format string, args ...interface{}) {
+	blog4go.Infof(format, args...)
 }
 
-// Critical logs a message at critical level.
-func Critical(v ...interface{}) {
-	BeeLogger.Critical(generateFmtStr(len(v)), v...)
+// Warn static function for Warn
+func Warn(args ...interface{}) {
+	blog4go.Warn(args...)
 }
 
-func Criticalf(format string, v ...interface{}) {
-	BeeLogger.Critical(format, v...)
+// Warnf static function for Warnf
+func Warnf(format string, args ...interface{}) {
+	blog4go.Warnf(format, args...)
 }
 
-// Error logs a message at error level.
-func Error(v ...interface{}) {
-	BeeLogger.Error(generateFmtStr(len(v)), v...)
+// Error static function for Error
+func Error(args ...interface{}) {
+	blog4go.Error(args...)
 }
 
-func Errorf(format string, v ...interface{}) {
-	BeeLogger.Error(format, v...)
+// Errorf static function for Errorf
+func Errorf(format string, args ...interface{}) {
+	blog4go.Errorf(format, args...)
 }
 
-// Warning logs a message at warning level.
-func Warning(v ...interface{}) {
-	BeeLogger.Warning(generateFmtStr(len(v)), v...)
+// Critical static function for Critical
+func Critical(args ...interface{}) {
+	blog4go.Critical(args...)
 }
 
-func Warningf(format string, v ...interface{}) {
-	BeeLogger.Warning(format, v...)
-}
-
-// Warn compatibility alias for Warning()
-func Warn(v ...interface{}) {
-	BeeLogger.Warn(generateFmtStr(len(v)), v...)
-}
-
-func Warnf(format string, v ...interface{}) {
-	BeeLogger.Warn(format, v...)
-}
-
-// Notice logs a message at notice level.
-func Notice(v ...interface{}) {
-	BeeLogger.Notice(generateFmtStr(len(v)), v...)
-}
-
-func Noticef(format string, v ...interface{}) {
-	BeeLogger.Notice(format, v...)
-}
-
-// Informational logs a message at info level.
-func Informational(v ...interface{}) {
-	BeeLogger.Informational(generateFmtStr(len(v)), v...)
-}
-
-func Informationalf(format string, v ...interface{}) {
-	BeeLogger.Informational(format, v...)
-}
-
-// Info compatibility alias for Warning()
-func Info(v ...interface{}) {
-	BeeLogger.Info(generateFmtStr(len(v)), v...)
-}
-
-func Infof(format string, v ...interface{}) {
-	BeeLogger.Info(format, v...)
-}
-
-// Debug logs a message at debug level.
-func Debug(v ...interface{}) {
-	BeeLogger.Debug(generateFmtStr(len(v)), v...)
-}
-
-func Debugf(format string, v ...interface{}) {
-	BeeLogger.Debug(format, v...)
-}
-
-// Trace logs a message at trace level.
-// compatibility alias for Warning()
-func Trace(v ...interface{}) {
-	BeeLogger.Trace(generateFmtStr(len(v)), v...)
-}
-
-func Tracef(format string, v ...interface{}) {
-	BeeLogger.Trace(format, v...)
-}
-
-func generateFmtStr(n int) string {
-	return strings.Repeat("%v ", n)
+// Criticalf static function for Criticalf
+func Criticalf(format string, args ...interface{}) {
+	blog4go.Criticalf(format, args...)
 }
