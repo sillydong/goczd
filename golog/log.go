@@ -15,7 +15,7 @@
 package golog
 
 import (
-	"github.com/YoungPioneers/blog4go"
+	"github.com/sillydong/blog4go"
 	"github.com/sillydong/goczd/gofile"
 	"os"
 	"path"
@@ -32,6 +32,10 @@ func InitGoLog(filename string, level int, maxdays int) {
 	os.MkdirAll(diroflog, 0777)
 
 	blog4go.NewBaseFileWriter(filename, true)
+	//兼容旧库loglevel 7
+	if level > 5 {
+		level = 1
+	}
 	blog4go.SetLevel(blog4go.Levels[level])
 }
 
@@ -45,6 +49,10 @@ func InitGoMultiLog(filedir string, level int, maxdays int) {
 	os.MkdirAll(filedir, 0777)
 
 	blog4go.NewFileWriter(filedir, true)
+	//兼容旧库loglevel 7
+	if level > 5 {
+		level = 1
+	}
 	blog4go.SetLevel(blog4go.Levels[level])
 }
 
