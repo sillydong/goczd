@@ -3,9 +3,10 @@ package gohttp
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
+
 	"github.com/astaxie/beego/httplib"
 	"github.com/google/go-querystring/query"
-	"strings"
 )
 
 //返回数据接口
@@ -147,5 +148,62 @@ func DoPost(req Request) ([]byte, error) {
 		} else {
 			return nil, err
 		}
+	}
+}
+
+// POST JSON内容并处理返回
+func DoPostJsonResponse(req Request, resp Response) error {
+	bytes, err := DoPostJson(req)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(bytes, resp)
+
+}
+
+// POST JSON内容
+func DoPostJson(req Request) ([]byte, error) {
+	if err := req.B(); err != nil {
+		return nil, err
+	}
+	jcontent, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if ok, err := req.V(); ok {
+		url := req.URL()
+		if url != "" {
+			client := httplib.Post(url).SetEnableCookie(true)
+			if REQUEST_DEBUG {
+				client.Debug(true)
+				client.DumpBody(true)
+			}
+			if REQUEST_USERAGENT != "" {
+				client.SetUserAgent(REQUEST_USERAGENT)
+			}
+			client.Body(jcontent)
+			headers := req.H()
+			if len(headers) > 0 {
+				for key, val := range headers {
+					client.Header(key, val)
+				}
+			}
+			bytes, err := client.Bytes()
+			if REQUEST_DEBUG {
+				fmt.Printf("REQUEST:\n%v\n", string(client.DumpRequest()))
+				fmt.Printf("RESPONSE:\n%v\n", string(bytes))
+			}
+			if err != nil {
+				return nil, err
+			} else {
+				return bytes, nil
+			}
+		} else {
+			return nil, fmt.Errorf("REQUEST错误: %s\n", url)
+		}
+	} else {
+		return nil, err
 	}
 }
