@@ -40,8 +40,7 @@ func (e *event) OnAfterInvoke(name string, args []reflect.Value, byref bool, res
 	}
 }
 func (e *event) OnSendError(err error, context hprose.Context) {
-	golog.Errorf("%+v", err)
-	golog.Errorf("%+v", context)
+	golog.Errorf("senderror: %v", err)
 }
 
 //init rpc

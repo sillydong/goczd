@@ -6,7 +6,7 @@ import (
 )
 
 func TestMD5(t *testing.T) {
-	fmt.Printf("%v\n", MD5([]byte("aaaaaaa")))
+	fmt.Printf("%v\n", MD5([]byte("qqqqqq")))
 }
 
 func TestHash(t *testing.T) {
