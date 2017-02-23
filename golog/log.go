@@ -15,10 +15,20 @@
 package golog
 
 import (
-	"github.com/sillydong/blog4go"
+	"github.com/YoungPioneers/blog4go"
 	"github.com/sillydong/goczd/gofile"
 	"os"
 	"path"
+)
+
+const (
+	LEVEL_TRACE = iota
+	LEVEL_DEBUG
+	LEVEL_INFO
+	LEVEL_WARNING
+	LEVEL_ERROR
+	LEVEL_CRITICLE
+	LEVEL_UNKNOWN
 )
 
 func InitGoLog(filename string, level int, maxdays int) {

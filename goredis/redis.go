@@ -2,7 +2,7 @@ package goredis
 
 import (
 	redigo "github.com/garyburd/redigo/redis"
-	goredis "gopkg.in/redis.v3"
+	goredis "gopkg.in/redis.v5"
 	"time"
 )
 
